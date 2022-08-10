@@ -1,5 +1,7 @@
+const LocalStrategy = require("passport-local");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
+const ObjectID = require("mongodb").ObjectID;
 
 module.exports = function (app, myDataBase) {
   function ensureAuthenticated(req, res, next) {
