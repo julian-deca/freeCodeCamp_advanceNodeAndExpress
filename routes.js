@@ -3,12 +3,24 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const ObjectID = require("mongodb").ObjectID;
 
+/*
+
+
+
+ensureAuthenticated not working?
+not redirecting to /chat
+authenticate failing
+
+
+
+*/
 module.exports = function (app, myDataBase) {
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
-    res.redirect("/");
+    console.log(req.isAuthenticated());
+    res.redirect("/aaa");
   }
   app.route("/").get((req, res) => {
     res.render("pug", {
@@ -70,8 +82,15 @@ module.exports = function (app, myDataBase) {
   app.get("/auth/github", passport.authenticate("github"));
   app.get(
     "/auth/github/callback",
-    passport.authenticate("github", { failureRedirect: "/" }, (req, res) => {
-      res.redirect("/profile");
-    })
+    passport.authenticate("github", { failureRedirect: "/aaaaa" }),
+    (req, res) => {
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      req.session.user_id = req.user.id;
+      res.redirect("/chat");
+    }
   );
+  app.get("/chat", ensureAuthenticated, (req, res) => {
+    console.log(process.cwd());
+    res.render(process.cwd() + "/views/pug/chat", { user: req.user });
+  });
 };
