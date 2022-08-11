@@ -7,9 +7,8 @@ const ObjectID = require("mongodb").ObjectID;
 
 
 
-ensureAuthenticated not working?
-not redirecting to /chat
-authenticate failing
+
+authenticate failing in github
 
 
 
@@ -19,8 +18,8 @@ module.exports = function (app, myDataBase) {
     if (req.isAuthenticated()) {
       return next();
     }
-    console.log(req.isAuthenticated());
-    res.redirect("/aaa");
+
+    res.redirect("/");
   }
   app.route("/").get((req, res) => {
     res.render("pug", {
@@ -84,7 +83,6 @@ module.exports = function (app, myDataBase) {
     "/auth/github/callback",
     passport.authenticate("github", { failureRedirect: "/aaaaa" }),
     (req, res) => {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       req.session.user_id = req.user.id;
       res.redirect("/chat");
     }
